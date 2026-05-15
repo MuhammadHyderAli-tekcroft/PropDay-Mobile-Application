@@ -1,7 +1,8 @@
 import { ActivityIndicator, View } from 'react-native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
-import { AuthProvider, useAuth } from '../context/AuthContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthProvider, useAuth } from '../src/store';
 
 const InitialLayout = () => {
     const { token, checking } = useAuth();
@@ -11,10 +12,9 @@ const InitialLayout = () => {
     useEffect(() => {
         if (checking) return;
 
-        const inAuthGroup = segments[0] === 'login';
+        const inAuthGroup = segments[0] === '(auth)';
 
         if (!token && !inAuthGroup) {
-            // Delaying by 1ms lets the Stack mount first, fixing the crash
             setTimeout(() => {
                 router.replace('/login');
             }, 1);
@@ -23,7 +23,7 @@ const InitialLayout = () => {
                 router.replace('/(tabs)');
             }, 1);
         }
-    }, [token, checking, segments]);
+    }, [token, checking, segments, router]);
 
     if (checking) {
         return (
@@ -35,7 +35,7 @@ const InitialLayout = () => {
 
     return (
         <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="login" />
+            <Stack.Screen name="(auth)" />
             <Stack.Screen name="(tabs)" />
         </Stack>
     );
@@ -43,8 +43,10 @@ const InitialLayout = () => {
 
 export default function RootLayout() {
     return (
-        <AuthProvider>
-            <InitialLayout />
-        </AuthProvider>
+        <SafeAreaProvider>
+            <AuthProvider>
+                <InitialLayout />
+            </AuthProvider>
+        </SafeAreaProvider>
     );
 }
