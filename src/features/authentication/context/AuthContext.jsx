@@ -1,10 +1,12 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import api,{ setAccessToken, setUnauthorizedHandler } from '../api';
+import { setAccessToken, setUnauthorizedHandler } from '../../../services';
+import { logoutRequest } from '../api/authApi';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
+    const checking = false;
 
     useEffect(() => {
         setUnauthorizedHandler(() => {
@@ -22,8 +24,8 @@ export const AuthProvider = ({ children }) => {
     const signOut = useCallback(async () => {
         if (token) {
             try {
-                const res = await api.post('/logout'); 
-                console.log('response message from Laravel Api', res.data.message);
+                const data = await logoutRequest();
+                console.log('response message from Laravel Api', data.message);
             } catch (error) {
                 console.log('Backend logout failed:', error.response?.data || error.message);
             }
@@ -33,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     return (
-        <AuthContext.Provider value={{ token, signIn, signOut }}>
+        <AuthContext.Provider value={{ token, signIn, signOut, checking }}>
             {children}
         </AuthContext.Provider>
     );
