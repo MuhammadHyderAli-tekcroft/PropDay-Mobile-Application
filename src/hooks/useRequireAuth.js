@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 
-import { useAuth } from '../../../store';
+import { useAuth } from '../store';
 
 export function useRequireAuth() {
     const { token } = useAuth();

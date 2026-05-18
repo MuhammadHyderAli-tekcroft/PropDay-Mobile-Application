@@ -1,11 +1,14 @@
 import { API_ORIGIN } from '../../../services/config';
 
 const CATEGORY_ICONS = {
-    house: 'home-outline',
-    villa: 'business-outline',
-    apartment: 'business',
-    bungalow: 'home',
-    residential: 'home-outline',
+    'residential': 'home',
+    'commercial': 'storefront',
+    'residential block': 'business',
+    'mixed': 'shapes',
+    'industrial': 'construct',
+    'land': 'map',
+    'water': 'water',
+    'farmland': 'leaf',
 };
 
 export function formatAddress(address) {
@@ -223,22 +226,6 @@ export function mapListing(raw) {
     return mapPropertyListing(raw);
 }
 
-export function extractListingsPayload(payload) {
-    if (Array.isArray(payload)) {
-        return payload;
-    }
-    if (Array.isArray(payload?.data)) {
-        return payload.data;
-    }
-    if (Array.isArray(payload?.listings)) {
-        return payload.listings;
-    }
-    if (Array.isArray(payload?.results)) {
-        return payload.results;
-    }
-    return [];
-}
-
 export function extractListingPayload(payload) {
     if (payload?.data && typeof payload.data === 'object' && !Array.isArray(payload.data)) {
         return payload.data;
@@ -258,15 +245,18 @@ export function splitListings(listings) {
 
 export function getCategoryIcon(typeName) {
     const key = String(typeName ?? '').toLowerCase();
-    return CATEGORY_ICONS[key] ?? 'home-outline';
+    return CATEGORY_ICONS[key] ?? 'business-outline';
 }
 
 export function buildCategoriesFromListings(listings) {
     const types = [...new Set(listings.map((item) => item.propertyType).filter(Boolean))];
 
-    return types.map((name, index) => ({
-        id: String(index + 1),
-        name,
-        icon: getCategoryIcon(name),
-    }));
+    return [
+        { id: 'all', name: 'All', icon: 'business' },
+        ...types.map((name, index) => ({
+            id: String(index + 1),
+            name,
+            icon: getCategoryIcon(name),
+        })),
+    ];
 }

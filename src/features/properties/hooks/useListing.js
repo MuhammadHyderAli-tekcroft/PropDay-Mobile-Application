@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { fetchListingById } from '../api/listingsApi';
+import { fetchListingById } from '../../../api/listingsApi';
 import { extractListingPayload, mapListing } from '../utils/mapListing';
 
 export function useListing(id, enabled = true) {

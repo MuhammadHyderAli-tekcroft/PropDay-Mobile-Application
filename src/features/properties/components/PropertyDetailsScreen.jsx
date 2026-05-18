@@ -13,8 +13,9 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import SplashScreen from '../../../components/SplashScreen';
+import ScreenShell from '../../../components/ScreenShell';
 import { useListing } from '../hooks/useListing';
-import { useRequireAuth } from '../hooks/useRequireAuth';
+import { useRequireAuth } from '../../../hooks/useRequireAuth';
 import { propertiesStyles as styles } from '../styles/properties.styles';
 
 export default function PropertyDetailsScreen() {
@@ -42,14 +43,14 @@ export default function PropertyDetailsScreen() {
 
     if (error || !listing) {
         return (
-            <SafeAreaView style={styles.safeArea}>
+            <ScreenShell>
                 <View style={styles.centerState}>
                     <Text style={styles.errorText}>{error ?? 'Property not found.'}</Text>
                     <TouchableOpacity style={styles.retryButton} onPress={handleRefetch}>
                         <Text style={styles.retryButtonText}>Try Again</Text>
                     </TouchableOpacity>
                 </View>
-            </SafeAreaView>
+            </ScreenShell>
         );
     }
 
@@ -60,10 +61,8 @@ export default function PropertyDetailsScreen() {
     const moreCount = galleryImages.length - 3;
 
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-            <View style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        <ScreenShell>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
                     <View style={styles.heroContainer}>
                         {listing.image ? (
                             <Image source={{ uri: listing.image }} style={styles.heroImage} />
@@ -172,12 +171,11 @@ export default function PropertyDetailsScreen() {
                     </View>
                 </ScrollView>
 
-                <View style={styles.bottomBar}>
-                    <TouchableOpacity style={styles.bookButton}>
-                        <Text style={styles.bookButtonText}>Book Now</Text>
-                    </TouchableOpacity>
-                </View>
+            <View style={styles.bottomBar}>
+                <TouchableOpacity style={styles.bookButton}>
+                    <Text style={styles.bookButtonText}>Book Now</Text>
+                </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </ScreenShell>
     );
 }

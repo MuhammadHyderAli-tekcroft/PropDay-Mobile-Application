@@ -4,6 +4,7 @@ export default function PropertiesLayout() {
     return (
         <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" />
+            <Stack.Screen name="see-all" />
         </Stack>
     );
 }

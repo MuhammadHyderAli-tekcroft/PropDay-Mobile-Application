@@ -2,9 +2,11 @@ import { useCallback, useRef, useState } from 'react';
 import { Animated, Dimensions, Easing } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import { navigateSidebarItem } from '../utils/sidebarNavigation';
+
 const { width: screenWidth } = Dimensions.get('window');
 
-export function usePropertiesSidebar() {
+export function useSidebar(activeItem) {
     const router = useRouter();
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const slideAnim = useRef(new Animated.Value(-screenWidth)).current;
@@ -47,18 +49,9 @@ export function usePropertiesSidebar() {
 
     const onSidebarNavigate = useCallback(
         (item) => {
-            if (item === 'Dashboard') {
-                router.replace('/(tabs)');
-                return;
-            }
-            if (item === 'Properties') {
-                return;
-            }
-            if (item === 'Logout') {
-                router.push('/logout');
-            }
+            navigateSidebarItem(router, item, activeItem);
         },
-        [router]
+        [router, activeItem]
     );
 
     return {

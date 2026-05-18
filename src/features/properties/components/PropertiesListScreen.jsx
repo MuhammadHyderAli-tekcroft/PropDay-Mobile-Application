@@ -1,44 +1,30 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    ScrollView,
-    SafeAreaView,
-    StatusBar,
-} from 'react-native';
+import { useCallback, useMemo, useState } from 'react';
+import { useRouter } from 'expo-router';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import SplashScreen from '../../../components/SplashScreen';
+import ScreenShell from '../../../components/ScreenShell';
 import Sidebar from '../../../components/Sidebar';
+import AppTopHeader from '../../../components/AppTopHeader';
 import PropertyCardLarge from './PropertyCardLarge';
 import PropertyCardSmall from './PropertyCardSmall';
 import { useListings } from '../hooks/useListings';
-import { usePropertiesSidebar } from '../hooks/usePropertiesSidebar';
-import { useRequireAuth } from '../hooks/useRequireAuth';
+import { useRequireAuth } from '../../../hooks/useRequireAuth';
+import { useSidebar } from '../../../hooks/useSidebar';
+import { PROPERTY_SECTIONS } from '../constants/propertySections';
+import { filterByCategory } from '../utils/filterByCategory';
 import { propertiesStyles as styles } from '../styles/properties.styles';
 
-function filterByCategory(listings, activeCategory) {
-    if (!activeCategory) {
-        return listings;
-    }
-    return listings.filter((item) => item.propertyType === activeCategory);
-}
-
 export default function PropertiesListScreen() {
+    const router = useRouter();
     const { isAuthenticated } = useRequireAuth();
-    const { listings, categories, loading, error, refetch } = useListings(isAuthenticated);
+    const { listings, categories, companyName, loading, error, refetch } = useListings(isAuthenticated);
     const { isSidebarVisible, slideAnim, fadeAnim, openMenu, closeMenu, onSidebarNavigate } =
-        usePropertiesSidebar();
+        useSidebar('Properties');
 
-    const [activeCategory, setActiveCategory] = useState(null);
+    const [activeCategory, setActiveCategory] = useState('All');
     const [splashDone, setSplashDone] = useState(false);
-
-    useEffect(() => {
-        if (categories.length > 0 && !activeCategory) {
-            setActiveCategory(categories[0].name);
-        }
-    }, [categories, activeCategory]);
 
     const filteredProperties = useMemo(
         () => filterByCategory(listings, activeCategory),
@@ -62,40 +48,22 @@ export default function PropertiesListScreen() {
 
     if (error) {
         return (
-            <SafeAreaView style={styles.safeArea}>
+            <ScreenShell>
                 <View style={styles.centerState}>
                     <Text style={styles.errorText}>{error}</Text>
                     <TouchableOpacity style={styles.retryButton} onPress={handleRefetch}>
                         <Text style={styles.retryButtonText}>Try Again</Text>
                     </TouchableOpacity>
                 </View>
-            </SafeAreaView>
+            </ScreenShell>
         );
     }
 
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View>
-                        <Text style={styles.locationLabel}>Location</Text>
-                        <TouchableOpacity style={styles.locationSelector} onPress={openMenu}>
-                            <Ionicons name="menu" size={20} color="#000" style={{ marginRight: 8 }} />
-                            <Ionicons name="location-sharp" size={16} color="#000" />
-                            <Text style={styles.locationText}>Lahore, Pakistan</Text>
-                            <Ionicons name="chevron-down" size={16} color="#000" />
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <TouchableOpacity style={styles.iconCircle}>
-                            <Ionicons name="notifications-outline" size={20} color="#000" />
-                            <View style={styles.notificationDot} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+        <ScreenShell>
+            <AppTopHeader companyName={companyName} onMenuPress={openMenu} />
 
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
                     {categories.length > 0 ? (
                         <ScrollView
                             horizontal
@@ -135,7 +103,14 @@ export default function PropertiesListScreen() {
 
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>Recommended Property</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() =>
+                                router.push({
+                                    pathname: '/properties/see-all',
+                                    params: { section: PROPERTY_SECTIONS.RECOMMENDED },
+                                })
+                            }
+                        >
                             <Text style={styles.seeAll}>See all</Text>
                         </TouchableOpacity>
                     </View>
@@ -156,7 +131,14 @@ export default function PropertiesListScreen() {
 
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>Nearby Property</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() =>
+                                router.push({
+                                    pathname: '/properties/see-all',
+                                    params: { section: PROPERTY_SECTIONS.NEARBY },
+                                })
+                            }
+                        >
                             <Text style={styles.seeAll}>See all</Text>
                         </TouchableOpacity>
                     </View>
@@ -170,8 +152,7 @@ export default function PropertiesListScreen() {
                             ))
                         )}
                     </View>
-                </ScrollView>
-            </View>
+            </ScrollView>
 
             <Sidebar
                 isVisible={isSidebarVisible}
@@ -181,6 +162,6 @@ export default function PropertiesListScreen() {
                 onNavigate={onSidebarNavigate}
                 activeItem="Properties"
             />
-        </SafeAreaView>
+        </ScreenShell>
     );
 }
