@@ -18,14 +18,18 @@ const { width } = Dimensions.get('window');
 const MENU_ITEMS = [
     'Dashboard',
     'Properties',
-    'Tenants',
-    'Owners',
-    'Financials',
-    'Bank Accounts',
-    'Maintenance',
+    'Tenancies',
+    'Documents',
+    'Keys',
+    'Finance',
+    'Tasks',
+    'Screening',
+    'WorkOrders',
+    'Contacts',
     'Reports',
-    'AI Voice Agent',
+    'Xero Panel',
     'Settings',
+    'Privileges',
     'Logout',
 ];
 
@@ -54,6 +58,10 @@ function Sidebar({ isVisible, slideAnim, fadeAnim, closeMenu, onNavigate, active
             >
                 <SafeAreaView style={styles.safeArea}>
                     <View style={styles.sidebarHeader}>
+                        <Image 
+                            source={{ uri: 'https://images.unsplash.com/vector-1778754802871-d0fc1a7b5ecc?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }}
+                            style={styles.headerBackgroundImage}
+                        />
                         <Image
                             source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
                             style={styles.avatarLarge}
@@ -64,7 +72,6 @@ function Sidebar({ isVisible, slideAnim, fadeAnim, closeMenu, onNavigate, active
                             <Text style={styles.companyBadgeText}>High Gate</Text>
                         </View>
                     </View>
-
                     <ScrollView
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={styles.scrollContent}
@@ -125,12 +132,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         paddingTop: Platform.OS === 'android' ? 30 : 0,
     },
+    
+    headerBackgroundImage: {
+        position: 'absolute',
+        top: 0,       
+        left: 5,      
+        width: 70,     
+        height: 70,    
+        resizeMode: 'contain',
+    },
+    
     sidebarHeader: {
-        padding: 24,
-        paddingTop: Platform.OS === 'ios' ? 20 : 40,
-        backgroundColor: '#FAFAFA',
+        paddingHorizontal: 20,
+        paddingBottom: 20,
+        paddingTop: 10, 
         borderBottomWidth: 1,
         borderBottomColor: '#F0F0F0',
+        alignItems: 'center',
     },
     avatarLarge: {
         width: 56,
@@ -142,15 +160,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '800',
         color: '#0A0A0A',
+        textAlign: 'center',
     },
     userRole: {
         fontSize: 13,
         color: '#666',
         marginTop: 2,
+        textAlign: 'center',
     },
     companyBadge: {
         backgroundColor: '#0A0A0A',
-        alignSelf: 'flex-start',
+        alignSelf: 'center',
         paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 6,

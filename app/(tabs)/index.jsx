@@ -1,3 +1,3 @@
-import HomeScreen from '../../src/features/home/components/HomeScreen';
+import DashboardScreen from '../../src/features/dashboard/components/DashboardScreen';
 
-export default HomeScreen;
+export default DashboardScreen;

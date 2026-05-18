@@ -10,6 +10,7 @@ export default function MainTabsLayout() {
             }}
         >
             <Tabs.Screen name="index" />
+            <Tabs.Screen name="properties" />
             <Tabs.Screen name="logout" />
         </Tabs>
     );
