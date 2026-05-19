@@ -6,7 +6,16 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
+    const [showInitialSplash, setShowInitialSplash] = useState(true);
+    const [showPostLoginSplash, setShowPostLoginSplash] = useState(false);
     const checking = false;
+
+    const isSplashVisible = showInitialSplash || showPostLoginSplash;
+
+    const completeSplash = useCallback(() => {
+        setShowInitialSplash(false);
+        setShowPostLoginSplash(false);
+    }, []);
 
     useEffect(() => {
         setUnauthorizedHandler(() => {
@@ -19,6 +28,7 @@ export const AuthProvider = ({ children }) => {
     const signIn = useCallback((newToken) => {
         setAccessToken(newToken);
         setToken(newToken);
+        setShowPostLoginSplash(true);
     }, []);
 
     const signOut = useCallback(async () => {
@@ -35,7 +45,9 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     return (
-        <AuthContext.Provider value={{ token, signIn, signOut, checking }}>
+        <AuthContext.Provider
+            value={{ token, signIn, signOut, checking, isSplashVisible, completeSplash }}
+        >
             {children}
         </AuthContext.Provider>
     );

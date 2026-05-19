@@ -1,0 +1,126 @@
+import { Dimensions, StyleSheet } from 'react-native';
+
+import { propertyCardHeart, propertyCardShell } from './cardShared';
+
+const { width } = Dimensions.get('window');
+
+export const propertiesStyles = StyleSheet.create({
+    categoryContainer: { paddingHorizontal: 20, marginBottom: 24, gap: 16 },
+    categoryWrap: { alignItems: 'center' },
+    categoryIconBox: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: '#F5F5F5',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    categoryIconBoxActive: { backgroundColor: '#000' },
+    categoryText: { fontSize: 13, color: '#888', fontWeight: '500' },
+    categoryTextActive: { color: '#000', fontWeight: '700' },
+
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        marginBottom: 16,
+    },
+    sectionTitle: { fontSize: 15, fontWeight: '600', color: '#000' },
+    seeAll: { fontSize: 14, color: '#888', fontWeight: '600' },
+
+    horizontalList: { paddingHorizontal: 20, gap: 16, marginBottom: 24 },
+    cardLarge: {
+        width: width * 0.62,
+        borderRadius: 18,
+        ...propertyCardShell,
+    },
+    cardLargeBody: {
+        padding: 14,
+    },
+    cardImageContainer: { position: 'relative' },
+    cardImageLarge: {
+        width: '100%',
+        height: 148,
+        backgroundColor: '#ECEFF3',
+    },
+    heartButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        width: 34,
+        height: 34,
+        borderRadius: 17,
+        backgroundColor: '#FFFFFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        ...propertyCardHeart,
+    },
+    tagSmall: {
+        position: 'absolute',
+        bottom: 10,
+        left: 10,
+        backgroundColor: '#FFFFFF',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+    },
+    tagTextSmall: { fontSize: 10, fontWeight: '700', color: '#111827' },
+    cardTitle: { fontSize: 15, fontWeight: '700', color: '#111827', marginBottom: 6 },
+    cardLocationRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
+    cardLocationText: { fontSize: 12, color: '#6B7280', marginLeft: 4, flex: 1 },
+    cardPrice: { fontSize: 15, fontWeight: '700', color: '#E63946' },
+    cardPricePeriod: { fontSize: 12, color: '#9CA3AF', fontWeight: '500' },
+
+    verticalList: { paddingHorizontal: 20, gap: 18 },
+    cardSmall: {
+        flexDirection: 'row',
+        borderRadius: 18,
+        padding: 12,
+        ...propertyCardShell,
+    },
+    cardImageContainerSmall: { position: 'relative', marginRight: 14 },
+    cardImageSmall: {
+        width: 108,
+        height: 108,
+        borderRadius: 14,
+        backgroundColor: '#ECEFF3',
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+    },
+    heartButtonSmall: {
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        width: 28,
+        height: 28,
+        borderRadius: 14,
+        backgroundColor: '#FFFFFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        ...propertyCardHeart,
+    },
+    cardSmallContent: { flex: 1, justifyContent: 'center', paddingVertical: 2 },
+    tagTextSmallBox: {
+        fontSize: 10,
+        fontWeight: '700',
+        color: '#6B7280',
+        marginBottom: 6,
+        textTransform: 'uppercase',
+        letterSpacing: 0.3,
+    },
+
+    centerState: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+    errorText: { fontSize: 15, color: '#E63946', textAlign: 'center', marginBottom: 16 },
+    retryButton: {
+        backgroundColor: '#000',
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+        borderRadius: 24,
+    },
+    retryButtonText: { color: '#FFF', fontWeight: '700' },
+    emptyText: { fontSize: 15, color: '#888', textAlign: 'center' },
+});

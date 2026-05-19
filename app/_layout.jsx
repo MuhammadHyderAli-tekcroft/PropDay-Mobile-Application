@@ -1,16 +1,16 @@
-import { ActivityIndicator, View } from 'react-native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import SplashScreen from '../src/components/SplashScreen';
 import { AuthProvider, useAuth } from '../src/store';
 
 const InitialLayout = () => {
-    const { token, checking } = useAuth();
+    const { token, checking, isSplashVisible, completeSplash } = useAuth();
     const router = useRouter();
     const segments = useSegments();
 
     useEffect(() => {
-        if (checking) return;
+        if (checking || isSplashVisible) return;
 
         const inAuthGroup = segments[0] === '(auth)';
 
@@ -23,14 +23,10 @@ const InitialLayout = () => {
                 router.replace('/(tabs)');
             }, 1);
         }
-    }, [token, checking, segments, router]);
+    }, [token, checking, isSplashVisible, segments, router]);
 
-    if (checking) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-                <ActivityIndicator size="large" color="#1a2236" />
-            </View>
-        );
+    if (isSplashVisible) {
+        return <SplashScreen onFinish={completeSplash} />;
     }
 
     return (

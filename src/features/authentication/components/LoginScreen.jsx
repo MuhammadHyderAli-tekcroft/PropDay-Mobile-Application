@@ -20,11 +20,11 @@ import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { loginRequest } from '../api/authApi';
+import { PROPDAY_LOGO_URI } from '../../../constants/branding';
 
 const { height } = Dimensions.get('window');
 
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80';
-const LOGO_IMAGE = 'https://images.unsplash.com/vector-1778754802871-d0fc1a7b5ecc?q=80&w=880&auto=format&fit=crop';
 
 export default function LoginScreen() {
   const { signIn } = useAuth();
@@ -56,7 +56,7 @@ export default function LoginScreen() {
       <ImageBackground source={{ uri: HERO_IMAGE }} style={styles.heroImage}>
         <View style={styles.heroDarkOverlay}>
           <View style={styles.logoContainer}>
-            <Image source={{ uri: LOGO_IMAGE }} style={styles.customLogo} resizeMode="contain" />
+            <Image source={{ uri: PROPDAY_LOGO_URI }} style={styles.customLogo} resizeMode="contain" />
           </View>
         </View>
       </ImageBackground>
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
   },
-  customLogo: { width: 70, height: 70 },
+  customLogo: { width: 100, height: 100 },
   curvedSheet: {
     flex: 1,
     backgroundColor: '#FFF',
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     borderColor: '#EEE',
   },
   inputIcon: { marginRight: 12 },
-  input: { flex: 1, fontSize: 15, color: '#111', marginBottom: 10 },
+  input: { flex: 1, fontSize: 15, color: '#111'},
   eyeBtn: { padding: 4 },
   loginButton: {
     backgroundColor: '#111',
