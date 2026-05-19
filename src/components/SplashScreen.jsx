@@ -6,12 +6,6 @@ import { PROPDAY_LOGO_URI, SPLASH_DURATION_MS } from '../constants/branding';
 
 const FADE_OUT_MS = 500;
 
-/**
- * @param {Object} props
- * @param {() => void} [props.onFinish] - Called after splash dismisses.
- * @param {number} [props.duration] - Timed mode duration (app launch / post-login).
- * @param {boolean} [props.waiting] - When set, pulses until `waiting` becomes false, then fades out.
- */
 export default function SplashScreen({ onFinish, duration = SPLASH_DURATION_MS, waiting }) {
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const pulseAnim = useRef(new Animated.Value(0)).current;

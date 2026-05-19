@@ -150,30 +150,6 @@ export const propertiesSeeAllStyles = StyleSheet.create({
         color: '#888',
         fontWeight: '500',
     },
-
-    mapFab: {
-        position: 'absolute',
-        bottom: 28,
-        alignSelf: 'center',
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#000',
-        paddingHorizontal: 22,
-        paddingVertical: 14,
-        borderRadius: 28,
-        gap: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 6,
-    },
-    mapFabText: {
-        color: '#FFF',
-        fontSize: 15,
-        fontWeight: '700',
-    },
-
     centerState: {
         flex: 1,
         justifyContent: 'center',

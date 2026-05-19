@@ -95,12 +95,6 @@ export default function PropertiesSeeAllScreen() {
                         showsVerticalScrollIndicator={false}
                     />
                 )}
-
-                <TouchableOpacity style={styles.mapFab} activeOpacity={0.9}>
-                    <Ionicons name="map-outline" size={18} color="#FFF" />
-                    <Text style={styles.mapFabText}>Map View</Text>
-                </TouchableOpacity>
-
             <Sidebar
                 isVisible={isSidebarVisible}
                 slideAnim={slideAnim}

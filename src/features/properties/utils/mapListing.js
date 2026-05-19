@@ -22,7 +22,7 @@ export function formatAddress(address) {
         return String(address);
     }
 
-    const record = /** @type {Record<string, unknown>} */ (address);
+    const record = (address);
     const parts = [
         record.line_one,
         record.line_two,
@@ -47,7 +47,7 @@ export function toDisplayString(value, fallback = '') {
         return String(value);
     }
     if (typeof value === 'object') {
-        const record = /** @type {Record<string, unknown>} */ (value);
+        const record = (value);
         if (record.name != null) {
             return String(record.name);
         }
@@ -61,7 +61,7 @@ function formatPersonName(person) {
     if (!person || typeof person !== 'object') {
         return '';
     }
-    const record = /** @type {Record<string, unknown>} */ (person);
+    const record = (person);
     const meta = record.meta && typeof record.meta === 'object' ? record.meta : {};
     const lastName =
         meta && typeof meta === 'object' && 'last_name' in meta ? meta.last_name : '';
@@ -100,7 +100,7 @@ function isMainListingImage(customProperties) {
     if (!customProperties || typeof customProperties !== 'object') {
         return false;
     }
-    const record = /** @type {Record<string, unknown>} */ (customProperties);
+    const record = (customProperties);
     const isMain = record.is_main;
     return isMain === true || isMain === 'true' || isMain === 1 || isMain === '1';
 }
@@ -114,7 +114,7 @@ export function pickMainImageFromImages(images) {
         if (!item || typeof item !== 'object') {
             return false;
         }
-        const record = /** @type {Record<string, unknown>} */ (item);
+        const record = (item);
         return isMainListingImage(record.custom_properties);
     });
 
@@ -122,7 +122,7 @@ export function pickMainImageFromImages(images) {
         return null;
     }
 
-    const record = /** @type {Record<string, unknown>} */ (mainEntry);
+    const record = (mainEntry);
     const url =
         (typeof record.original_url === 'string' && record.original_url) ||
         (typeof record.preview_url === 'string' && record.preview_url) ||
@@ -182,7 +182,7 @@ export function mapPropertyListing(raw) {
     const lettingAgent = raw.letting_agent;
     const agent =
         lettingAgent && typeof lettingAgent === 'object'
-            ? /** @type {Record<string, unknown>} */ (lettingAgent)
+            ? (lettingAgent)
             : null;
 
     const rentValue = raw.rent ?? raw.monthly_payment;

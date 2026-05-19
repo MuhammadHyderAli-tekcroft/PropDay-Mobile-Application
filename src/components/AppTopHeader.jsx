@@ -1,10 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-/**
- * Shared top bar: menu (left), company name (center), notifications (right).
- * Use across Dashboard, Properties, and other main sections.
- */
 export default function AppTopHeader({
     companyName,
     onMenuPress,
