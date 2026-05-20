@@ -24,11 +24,7 @@ export default function SplashScreen({ onFinish, duration = SPLASH_DURATION_MS, 
             duration: FADE_OUT_MS,
             easing: Easing.in(Easing.cubic),
             useNativeDriver: true,
-        }).start(({ finished }) => {
-            if (finished) {
-                onFinish?.();
-            }
-        });
+        }).start(({ finished }) => finished && onFinish?.());
     };
 
     useEffect(() => {
@@ -59,16 +55,10 @@ export default function SplashScreen({ onFinish, duration = SPLASH_DURATION_MS, 
             duration: 700,
             easing: Easing.out(Easing.cubic),
             useNativeDriver: true,
-        }).start(({ finished }) => {
-            if (finished) {
-                pulseLoop.start();
-            }
-        });
+        }).start(({ finished }) => finished && pulseLoop.start());
 
-        let finishTimer;
-        if (waiting === undefined) {
-            finishTimer = setTimeout(dismiss, Math.max(duration - FADE_OUT_MS, 0));
-        }
+        const finishTimer =
+            waiting === undefined ? setTimeout(dismiss, Math.max(duration - FADE_OUT_MS, 0)) : undefined;
 
         return () => {
             clearTimeout(finishTimer);
@@ -79,9 +69,7 @@ export default function SplashScreen({ onFinish, duration = SPLASH_DURATION_MS, 
     }, [duration, waiting, fadeAnim, pulseAnim]);
 
     useEffect(() => {
-        if (waiting === false) {
-            dismiss();
-        }
+        waiting === false && dismiss();
     }, [waiting]);
 
     const pulseOpacity = pulseAnim.interpolate({

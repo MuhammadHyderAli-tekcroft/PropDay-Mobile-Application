@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -13,7 +13,13 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
+import { fetchcurrentUser } from '../api/contactApi';
+import { unwrapPayloadData } from '../utils/extractPayload';
+import { formatUserDisplayName } from '../utils/formatUserDisplayName';
+import { resolveUserAvatar } from '../utils/resolveMediaUrl';
+import { useAuth } from '../store';
 const { width } = Dimensions.get('window');
+const DEFAULT_AVATAR = 'https://randomuser.me/api/portraits/men/32.jpg';
 
 const MENU_ITEMS = [
     'Dashboard',
@@ -34,11 +40,46 @@ const MENU_ITEMS = [
 ];
 
 function Sidebar({ isVisible, slideAnim, fadeAnim, closeMenu, onNavigate, activeItem = 'Properties' }) {
-    if (!isVisible) {
-        return null;
-    }
+    const { token } = useAuth();
+    const [userAvatar, setUserAvatar] = useState(DEFAULT_AVATAR);
+    const [userName, setUserName] = useState('Muhammad Hyder Ali');
+    const [userRole, setUserRole] = useState('Associate Software Engineer');
+    const [companyName, setCompanyName] = useState('High Gate');
 
-    return (
+    useEffect(() => {
+        if (!token || !isVisible) {
+            return;
+        }
+
+        let active = true;
+
+        async function loadUser() {
+            try {
+                const body = await fetchcurrentUser();
+                const user = unwrapPayloadData(body);
+                if (!active || !user) {
+                    return;
+                }
+
+                const avatarUrl = resolveUserAvatar(user);
+                const name = formatUserDisplayName(user);
+
+                avatarUrl && setUserAvatar(avatarUrl);
+                name && setUserName(name);
+                user.type && setUserRole(user.type);
+                user.company?.name && setCompanyName(user.company.name);
+            } catch {
+            }
+        }
+
+        loadUser();
+
+        return () => {
+            active = false;
+        };
+    }, [token, isVisible]);
+
+    return !isVisible ? null : (
         <View style={styles.rootContainer} pointerEvents="box-none">
             <Animated.View
                 style={[styles.sidebarBackdrop, { opacity: fadeAnim }]}
@@ -63,13 +104,13 @@ function Sidebar({ isVisible, slideAnim, fadeAnim, closeMenu, onNavigate, active
                             style={styles.headerBackgroundImage}
                         />
                         <Image
-                            source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
+                            source={{ uri: userAvatar || DEFAULT_AVATAR }}
                             style={styles.avatarLarge}
                         />
-                        <Text style={styles.userName}>Muhammad Hyder Ali</Text>
-                        <Text style={styles.userRole}>Associate Software Engineer</Text>
+                        <Text style={styles.userName}>{userName}</Text>
+                        <Text style={styles.userRole}>{userRole}</Text>
                         <View style={styles.companyBadge}>
-                            <Text style={styles.companyBadgeText}>High Gate</Text>
+                            <Text style={styles.companyBadgeText}>{companyName}</Text>
                         </View>
                     </View>
                     <ScrollView

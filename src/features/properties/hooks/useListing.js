@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { fetchListingById } from '../../../api/listingsApi';
-import { extractListingPayload, mapListing } from '../utils/mapListing';
+import { extractObjectPayload } from '../../../utils/extractPayload';
+import { getApiErrorMessage } from '../../../utils/getApiErrorMessage';
+import { mapListing } from '../utils/mapListing';
 
 export function useListing(id, enabled = true) {
     const [listing, setListing] = useState(null);
@@ -20,10 +22,10 @@ export function useListing(id, enabled = true) {
 
         try {
             const payload = await fetchListingById(id);
-            const raw = extractListingPayload(payload);
+            const raw = extractObjectPayload(payload);
             setListing(mapListing(raw));
         } catch (err) {
-            setError(err.response?.data?.message ?? err.message ?? 'Failed to load property.');
+            setError(getApiErrorMessage(err, 'Failed to load property.'));
             setListing(null);
         } finally {
             setLoading(false);
