@@ -10,16 +10,18 @@ import AppTopHeader from '../../../components/AppTopHeader';
 import PropertyCardLarge from './PropertyCardLarge';
 import PropertyCardSmall from './PropertyCardSmall';
 import { useListings } from '../hooks/useListings';
+import { useCompanyName } from '../../../hooks/useCompanyName';
 import { useRequireAuth } from '../../../hooks/useRequireAuth';
 import { useSidebar } from '../../../hooks/useSidebar';
 import { PROPERTY_SECTIONS } from '../constants/propertySections';
-import { filterByCategory } from '../utils/filterByCategory';
+import { filterByActiveOption } from '../../../utils/filterByActiveOption';
 import { propertiesStyles as styles } from '../styles/properties.styles';
 
 export default function PropertiesListScreen() {
     const router = useRouter();
     const { isAuthenticated } = useRequireAuth();
-    const { listings, categories, companyName, loading, error, refetch } = useListings(isAuthenticated);
+    const { listings, categories, loading, error, refetch } = useListings(isAuthenticated);
+    const { companyName } = useCompanyName(isAuthenticated);
     const { isSidebarVisible, slideAnim, fadeAnim, openMenu, closeMenu, onSidebarNavigate } =
         useSidebar('Properties');
 
@@ -27,7 +29,7 @@ export default function PropertiesListScreen() {
     const [splashDone, setSplashDone] = useState(false);
 
     const filteredProperties = useMemo(
-        () => filterByCategory(listings, activeCategory),
+        () => filterByActiveOption(listings, activeCategory, (item) => item.propertyType),
         [listings, activeCategory]
     );
 

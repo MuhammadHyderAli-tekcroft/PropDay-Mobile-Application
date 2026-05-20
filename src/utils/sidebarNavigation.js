@@ -1,18 +1,16 @@
 /**
  * @param {import('expo-router').Router} router
- * @param {string} item
- * @param {string} activeItem
  */
+const SIDEBAR_ACTIONS = {
+    Dashboard: (router) => router.replace('/(tabs)'),
+    Properties: (router) => router.push('/properties'),
+    Contacts: (router) => router.push('/contacts'),
+    Logout: (router) => router.replace('/logout'),
+};
 export function navigateSidebarItem(router, item, activeItem) {
-    if (item === 'Dashboard' && activeItem !== 'Dashboard') {
-        router.replace('/(tabs)');
+    if (item === activeItem) {
         return;
     }
-    if (item === 'Properties' && activeItem !== 'Properties') {
-        router.push('/properties');
-        return;
-    }
-    if (item === 'Logout') {
-        router.push('/logout');
-    }
+
+    SIDEBAR_ACTIONS[item]?.(router);
 }

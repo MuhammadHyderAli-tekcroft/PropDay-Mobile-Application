@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { fetchListings } from '../api/listingsApi';
-import { extractCompanyName } from '../utils/extractCompanyName';
-import { extractListingsPayload } from '../utils/extractListingsPayload';
+import { fetchCompanyName } from '../utils/companyName';
+import { getApiErrorMessage } from '../utils/getApiErrorMessage';
 
 export function useCompanyName(enabled = true) {
     const [companyName, setCompanyName] = useState(null);
@@ -14,11 +13,9 @@ export function useCompanyName(enabled = true) {
         setError(null);
 
         try {
-            const payload = await fetchListings();
-            const allRaw = extractListingsPayload(payload);
-            setCompanyName(extractCompanyName(allRaw));
+            setCompanyName(await fetchCompanyName());
         } catch (err) {
-            setError(err.response?.data?.message ?? err.message ?? 'Failed to load company.');
+            setError(getApiErrorMessage(err, 'Failed to load company.'));
             setCompanyName(null);
         } finally {
             setLoading(false);

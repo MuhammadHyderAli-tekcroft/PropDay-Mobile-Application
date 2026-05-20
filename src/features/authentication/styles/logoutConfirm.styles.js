@@ -1,0 +1,87 @@
+import { StyleSheet } from 'react-native';
+
+export const logoutConfirmStyles = StyleSheet.create({
+    screen: {
+        flex: 1,
+        backgroundColor: '#F3F4F6',
+    },
+    content: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingHorizontal: 24,
+    },
+    card: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 24,
+        paddingHorizontal: 28,
+        paddingTop: 36,
+        paddingBottom: 28,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#EAEAEA',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.08,
+        shadowRadius: 24,
+        elevation: 6,
+    },
+    iconWrap: {
+        width: 72,
+        height: 72,
+        borderRadius: 36,
+        backgroundColor: '#FEE2E2',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: '700',
+        color: '#111827',
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    message: {
+        fontSize: 15,
+        lineHeight: 22,
+        color: '#6B7280',
+        textAlign: 'center',
+        marginBottom: 28,
+    },
+    actions: {
+        width: '100%',
+    },
+    logoutButton: {
+        width: '100%',
+        height: 52,
+        borderRadius: 14,
+        backgroundColor: '#E63946',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginBottom: 12,
+    },
+    logoutButtonDisabled: {
+        opacity: 0.7,
+    },
+    logoutButtonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '700',
+    },
+    cancelButton: {
+        width: '100%',
+        height: 52,
+        borderRadius: 14,
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    cancelButtonText: {
+        color: '#374151',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+});

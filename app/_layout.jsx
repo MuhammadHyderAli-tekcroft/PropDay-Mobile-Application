@@ -10,32 +10,28 @@ const InitialLayout = () => {
     const segments = useSegments();
 
     useEffect(() => {
-        if (checking || isSplashVisible) return;
+        if (checking || isSplashVisible) {
+            return;
+        }
 
         const inAuthGroup = segments[0] === '(auth)';
+        const destination = !token && !inAuthGroup ? '/login' : token && inAuthGroup ? '/(tabs)' : null;
 
-        if (!token && !inAuthGroup) {
+        destination &&
             setTimeout(() => {
-                router.replace('/login');
+                router.replace(destination);
             }, 1);
-        } else if (token && inAuthGroup) {
-            setTimeout(() => {
-                router.replace('/(tabs)');
-            }, 1);
-        }
     }, [token, checking, isSplashVisible, segments, router]);
 
-    if (isSplashVisible) {
-        return <SplashScreen onFinish={completeSplash} />;
-    }
-
-    return (
+    return isSplashVisible ? (
+        <SplashScreen onFinish={completeSplash} />
+    ) : (
         <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(auth)" />
             <Stack.Screen name="(tabs)" />
         </Stack>
     );
-};
+}
 
 export default function RootLayout() {
     return (
