@@ -1,7 +1,9 @@
+import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from '../src/components/SplashScreen';
+import { queryClient } from '../src/lib/queryClient';
 import { AuthProvider, useAuth } from '../src/store';
 
 const InitialLayout = () => {
@@ -36,9 +38,11 @@ const InitialLayout = () => {
 export default function RootLayout() {
     return (
         <SafeAreaProvider>
-            <AuthProvider>
-                <InitialLayout />
-            </AuthProvider>
+            <QueryClientProvider client={queryClient}>
+                <AuthProvider>
+                    <InitialLayout />
+                </AuthProvider>
+            </QueryClientProvider>
         </SafeAreaProvider>
     );
 }
