@@ -19,6 +19,7 @@ export function useContactsQuery(enabled = true) {
         total: query.data?.total ?? 0,
         isPending: query.isPending,
         isFetching: query.isFetching,
+        isRefetching: query.isRefetching,
         error: query.error,
         refetch: query.refetch,
     };

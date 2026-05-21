@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import QueryRefreshControl from '../../../components/QueryRefreshControl';
 import { useLocalSearchParams } from 'expo-router';
 
 import ScreenShell from '../../../components/ScreenShell';
@@ -10,7 +11,7 @@ import { useRequireAuth } from '../../../hooks/useRequireAuth';
 import { useSidebar } from '../../../hooks/useSidebar';
 import { filterByActiveOption } from '../../../utils/filterByActiveOption';
 import { PROPERTY_SECTIONS, PROPERTY_SECTION_TITLES } from '../constants/propertySections';
-import { useListingsQuery } from '../queries/useListingsQuery';
+import { useListingsQuery } from '../queries/listingsQueries';
 import PropertyListCard from './PropertyListCard';
 import { propertiesSeeAllStyles as styles } from '../styles/propertiesSeeAll.styles';
 
@@ -20,7 +21,8 @@ export default function PropertiesSeeAllScreen() {
     const isNearby = sectionKey === PROPERTY_SECTIONS.NEARBY;
 
     const { isAuthenticated } = useRequireAuth();
-    const { recommended, nearby, categories, isPending } = useListingsQuery(isAuthenticated);
+    const { recommended, nearby, categories, isPending, isRefetching, refetch } =
+        useListingsQuery(isAuthenticated);
     const { companyName } = useCompanyNameQuery(isAuthenticated);
     const { isSidebarVisible, slideAnim, fadeAnim, openMenu, closeMenu, onSidebarNavigate } =
         useSidebar('Properties');
@@ -80,24 +82,25 @@ export default function PropertiesSeeAllScreen() {
 
             <Text style={styles.pageTitle}>{pageTitle}</Text>
 
-            {isPending && filteredProperties.length === 0 ? (
-                <View style={styles.centerState}>
-                    <Text style={styles.emptyText}>Loading properties…</Text>
-                </View>
-            ) : filteredProperties.length === 0 ? (
-                <View style={styles.centerState}>
-                    <Text style={styles.emptyText}>No properties found.</Text>
-                </View>
-            ) : (
-                <FlatList
-                    style={styles.list}
-                    data={filteredProperties}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <PropertyListCard item={item} />}
-                    contentContainerStyle={styles.listContent}
-                    showsVerticalScrollIndicator={false}
-                />
-            )}
+            <FlatList
+                style={styles.list}
+                data={filteredProperties}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <PropertyListCard item={item} />}
+                contentContainerStyle={[
+                    styles.listContent,
+                    filteredProperties.length === 0 && styles.listContentEmpty,
+                ]}
+                showsVerticalScrollIndicator={false}
+                refreshControl={<QueryRefreshControl refetch={refetch} isRefetching={isRefetching} />}
+                ListEmptyComponent={
+                    <View style={styles.centerState}>
+                        <Text style={styles.emptyText}>
+                            {isPending ? 'Loading properties…' : 'No properties found.'}
+                        </Text>
+                    </View>
+                }
+            />
             <Sidebar
                 isVisible={isSidebarVisible}
                 slideAnim={slideAnim}

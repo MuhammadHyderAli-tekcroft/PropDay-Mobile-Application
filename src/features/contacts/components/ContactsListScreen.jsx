@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import QueryRefreshControl from '../../../components/QueryRefreshControl';
 
 import SplashScreen from '../../../components/SplashScreen';
 import ScreenShell from '../../../components/ScreenShell';
@@ -16,7 +17,8 @@ import { contactsStyles as styles } from '../styles/contacts.styles';
 
 export default function ContactsListScreen() {
     const { isAuthenticated } = useRequireAuth();
-    const { contacts, types, total, isPending, error, refetch } = useContactsQuery(isAuthenticated);
+    const { contacts, types, total, isPending, isRefetching, error, refetch } =
+        useContactsQuery(isAuthenticated);
     const { companyName } = useCompanyNameQuery(isAuthenticated);
     const { isSidebarVisible, slideAnim, fadeAnim, openMenu, closeMenu, onSidebarNavigate } =
         useSidebar('Contacts');
@@ -95,20 +97,23 @@ export default function ContactsListScreen() {
                 {activeType === 'All' ? `${total} total` : subtitle}
             </Text>
 
-            {filteredContacts.length === 0 ? (
-                <View style={styles.centerState}>
-                    <Text style={styles.emptyText}>No contacts found.</Text>
-                </View>
-            ) : (
-                <FlatList
-                    style={styles.list}
-                    data={filteredContacts}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <ContactCard item={item} />}
-                    contentContainerStyle={styles.listContent}
-                    showsVerticalScrollIndicator={false}
-                />
-            )}
+            <FlatList
+                style={styles.list}
+                data={filteredContacts}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <ContactCard item={item} />}
+                contentContainerStyle={[
+                    styles.listContent,
+                    filteredContacts.length === 0 && styles.listContentEmpty,
+                ]}
+                showsVerticalScrollIndicator={false}
+                refreshControl={<QueryRefreshControl refetch={refetch} isRefetching={isRefetching} />}
+                ListEmptyComponent={
+                    <View style={styles.centerState}>
+                        <Text style={styles.emptyText}>No contacts found.</Text>
+                    </View>
+                }
+            />
 
             <Sidebar
                 isVisible={isSidebarVisible}

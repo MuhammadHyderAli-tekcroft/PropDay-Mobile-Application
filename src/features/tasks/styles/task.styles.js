@@ -1,0 +1,81 @@
+import { StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
+import { StatusBar } from 'react-native';
+export const taskStyles = StyleSheet.create({
+    safeArea: { flex: 1, backgroundColor: '#F8F9FA', paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+    
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingBottom: 15 },
+    headerTitle: { fontSize: 30, fontWeight: '500', color: '#111',textAlign: 'center', marginLeft: 125 },
+    addButton: { backgroundColor: '#111', width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 5 },
+  
+    searchSectionZIndex: { zIndex: 10, elevation: 10 },
+    searchContainer: { flexDirection: 'row', paddingHorizontal: 20, marginBottom: 20, alignItems: 'center' },
+    searchBar: { flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#EAEAEA', borderRadius: 12, paddingHorizontal: 12, height: 44, marginRight: 12 },
+    searchInput: { flex: 1, marginLeft: 8, fontSize: 15, color: '#111' },
+    viewModeButton: { width: 44, height: 44, backgroundColor: '#EAEAEA', borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
+    
+    dropdownMenu: { position: 'absolute', top: 50, right: 20, backgroundColor: '#FFF', borderRadius: 12, padding: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 12, elevation: 6, width: 150, borderWidth: 1, borderColor: '#F0F0F0' },
+    dropdownItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 8 },
+    dropdownItemActive: { backgroundColor: '#F5F5F5' },
+    dropdownText: { fontSize: 14, color: '#666', fontWeight: '600' },
+    dropdownTextActive: { color: '#111', fontWeight: '800' },
+  
+    statsRow: { flexDirection: 'row', backgroundColor: '#FFF', marginHorizontal: 20, borderRadius: 16, paddingVertical: 16, marginBottom: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 10, elevation: 2, borderWidth: 1, borderColor: '#F0F0F0', zIndex: 1 },
+    statBox: { flex: 1, alignItems: 'center' },
+    statNumber: { fontSize: 22, fontWeight: '800', color: '#111' },
+    statLabel: { fontSize: 12, color: '#888', marginTop: 4, fontWeight: '500' },
+    statDivider: { width: 1, backgroundColor: '#F0F0F0' },
+  
+    tabContainer: { paddingLeft: 20, marginBottom: 16, zIndex: 1 },
+    tabButton: { paddingHorizontal: 20, paddingVertical: 8, borderRadius: 20, backgroundColor: '#FFF', marginRight: 12, borderWidth: 1, borderColor: '#EAEAEA' },
+    tabButtonActive: { backgroundColor: '#111', borderColor: '#111' },
+    tabText: { fontSize: 14, color: '#666', fontWeight: '600' },
+    tabTextActive: { color: '#FFF' },
+  
+    list: { flex: 1 },
+    listContent: { paddingHorizontal: 20, paddingBottom: 40 },
+    listContentGrow: { flexGrow: 1 },
+  
+    taskCard: { backgroundColor: '#FFF', borderRadius: 20, padding: 20, marginBottom: 16, borderWidth: 1, borderColor: '#F0F0F0', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 10, elevation: 2 },
+    cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+    typeBadge: { backgroundColor: '#F5F5F5', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 6 },
+    typeBadgeText: { fontSize: 11, fontWeight: '700', color: '#666', textTransform: 'uppercase' },
+    statusWrap: { flexDirection: 'row', alignItems: 'center' },
+    statusText: { fontSize: 13, fontWeight: '600', color: '#444', marginLeft: 6 },
+    taskDescription: { fontSize: 16, fontWeight: '700', color: '#111', lineHeight: 22, marginBottom: 8 },
+    unitRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
+    unitText: { fontSize: 13, color: '#666', marginLeft: 6, fontWeight: '500' },
+    separator: { height: 1, backgroundColor: '#F5F5F5', marginBottom: 16 },
+    cardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    assigneeRow: { flexDirection: 'row', alignItems: 'center' },
+    avatar: { width: 36, height: 36, borderRadius: 18, marginRight: 10, backgroundColor: '#EEE' },
+    assigneeLabel: { fontSize: 11, color: '#888' },
+    assigneeName: { fontSize: 13, fontWeight: '700', color: '#111' },
+    metaRight: { alignItems: 'flex-end' },
+    dateRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 6 },
+    dateText: { fontSize: 12, color: '#666', marginLeft: 4, fontWeight: '500' },
+    priorityBadge: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
+    priorityDot: { width: 6, height: 6, borderRadius: 3, marginRight: 4 },
+    priorityText: { fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
+  
+    compactCard: { flexDirection: 'row', backgroundColor: '#FFF', borderRadius: 12, padding: 16, marginBottom: 12, borderLeftWidth: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, elevation: 1 },
+    compactContent: { flex: 1, paddingRight: 12, justifyContent: 'center' },
+    compactDescription: { fontSize: 15, fontWeight: '700', color: '#111', marginBottom: 6 },
+    compactSubRow: { flexDirection: 'row', alignItems: 'center' },
+    compactUnit: { fontSize: 12, color: '#888' },
+    compactDot: { width: 4, height: 4, borderRadius: 2, backgroundColor: '#CCC', marginHorizontal: 8 },
+    compactStatus: { fontSize: 12, fontWeight: '600', color: '#666', marginLeft: 4 },
+    compactRight: { alignItems: 'flex-end', justifyContent: 'center' },
+    compactAvatar: { width: 28, height: 28, borderRadius: 14, marginBottom: 6 },
+    compactDate: { fontSize: 11, color: '#888', fontWeight: '500' },
+  
+    gridCard: { flex: 1, backgroundColor: '#FFF', borderRadius: 16, padding: 16, margin: 6, borderWidth: 1, borderColor: '#F0F0F0', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, elevation: 2, minHeight: 160 },
+    gridHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 },
+    gridPriorityStrip: { width: 24, height: 6, borderRadius: 3 },
+    gridDescription: { fontSize: 14, fontWeight: '700', color: '#111', lineHeight: 20, flex: 1 },
+    gridUnit: { fontSize: 11, color: '#888', marginTop: 8, marginBottom: 12 },
+    gridFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    gridAvatar: { width: 24, height: 24, borderRadius: 12 },
+    gridDateWrap: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#F9F9F9', paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4 },
+    gridDate: { fontSize: 10, color: '#666', marginLeft: 4, fontWeight: '600' }
+  });

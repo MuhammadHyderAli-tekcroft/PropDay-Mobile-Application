@@ -11,11 +11,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
+import QueryRefreshControl from '../../../components/QueryRefreshControl';
 import SplashScreen from '../../../components/SplashScreen';
 import ScreenShell from '../../../components/ScreenShell';
 import { useRequireAuth } from '../../../hooks/useRequireAuth';
 import { getApiErrorMessage } from '../../../utils/getApiErrorMessage';
-import { useListingQuery } from '../queries/useListingQuery';
+import { useListingQuery } from '../queries/listingsQueries';
 import { propertiesStyles as styles } from '../styles/properties.styles';
 
 export default function PropertyDetailsScreen() {
@@ -23,7 +24,10 @@ export default function PropertyDetailsScreen() {
     const { id } = useLocalSearchParams();
     const listingId = Array.isArray(id) ? id[0] : id;
     const { isAuthenticated } = useRequireAuth();
-    const { listing, isPending, error, refetch } = useListingQuery(listingId, isAuthenticated);
+    const { listing, isPending, isRefetching, error, refetch } = useListingQuery(
+        listingId,
+        isAuthenticated
+    );
 
     const errorMessage = error
         ? getApiErrorMessage(error, 'Failed to load property.')
@@ -70,7 +74,13 @@ export default function PropertyDetailsScreen() {
 
     return (
         <ScreenShell>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 100 }}
+                refreshControl={
+                    <QueryRefreshControl refetch={refetch} isRefetching={isRefetching} />
+                }
+            >
                 <View style={styles.heroContainer}>
                     {listing.image ? (
                         <Image source={{ uri: listing.image }} style={styles.heroImage} />

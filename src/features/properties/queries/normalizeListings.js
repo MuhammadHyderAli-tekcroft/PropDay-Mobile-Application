@@ -1,11 +1,16 @@
 import { buildFilterOptions, enrichCategoryFilterOptions } from '../../../utils/buildFilterOptions';
-import { extractArrayPayload, LIST_PAYLOAD_KEYS } from '../../../utils/extractPayload';
+import { extractArrayPayload, extractObjectPayload, LIST_PAYLOAD_KEYS } from '../../../utils/extractPayload';
 import {
     getCategoryIcon,
     isPropertyRecord,
     mapPropertyListing,
     splitListings,
 } from '../utils/mapListing';
+
+export function normalizeListingPayload(payload) {
+    const raw = extractObjectPayload(payload);
+    return mapPropertyListing(raw);
+}
 
 export function normalizeListingsPayload(payload) {
     const allRaw = extractArrayPayload(payload, LIST_PAYLOAD_KEYS);

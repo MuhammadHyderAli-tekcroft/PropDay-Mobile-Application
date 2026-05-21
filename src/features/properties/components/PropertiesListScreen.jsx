@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import QueryRefreshControl from '../../../components/QueryRefreshControl';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import SplashScreen from '../../../components/SplashScreen';
@@ -13,7 +14,7 @@ import { useSidebar } from '../../../hooks/useSidebar';
 import { getApiErrorMessage } from '../../../utils/getApiErrorMessage';
 import { filterByActiveOption } from '../../../utils/filterByActiveOption';
 import { PROPERTY_SECTIONS } from '../constants/propertySections';
-import { useListingsQuery } from '../queries/useListingsQuery';
+import { useListingsQuery } from '../queries/listingsQueries';
 import PropertyCardLarge from './PropertyCardLarge';
 import PropertyCardSmall from './PropertyCardSmall';
 import { propertiesStyles as styles } from '../styles/properties.styles';
@@ -21,7 +22,7 @@ import { propertiesStyles as styles } from '../styles/properties.styles';
 export default function PropertiesListScreen() {
     const router = useRouter();
     const { isAuthenticated } = useRequireAuth();
-    const { listings, recommended, nearby, categories, isPending, error, refetch } =
+    const { recommended, nearby, categories, isPending, isRefetching, error, refetch } =
         useListingsQuery(isAuthenticated);
     const { companyName } = useCompanyNameQuery(isAuthenticated);
     const { isSidebarVisible, slideAnim, fadeAnim, openMenu, closeMenu, onSidebarNavigate } =
@@ -66,7 +67,13 @@ export default function PropertiesListScreen() {
         <ScreenShell>
             <AppTopHeader companyName={companyName} onMenuPress={openMenu} />
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 40 }}
+                refreshControl={
+                    <QueryRefreshControl refetch={refetch} isRefetching={isRefetching} />
+                }
+            >
                 {categories.length > 0 ? (
                     <ScrollView
                         horizontal
