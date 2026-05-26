@@ -1,6 +1,3 @@
-/**
- * @param {import('expo-router').Router} router
- */
 const SIDEBAR_ACTIONS = {
     Dashboard: (router) => router.replace('/(tabs)'),
     Properties: (router) => router.push('/properties'),

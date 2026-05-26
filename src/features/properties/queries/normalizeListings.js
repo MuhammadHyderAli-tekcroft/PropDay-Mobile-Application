@@ -22,7 +22,6 @@ export function normalizeListingsPayload(payload) {
     const rawList = allRaw.filter(isParentPropertyRecord);
     const listingsFromParents = rawList.map(mapPropertyListing).filter((item) => item.id);
 
-    // Fallback: if API returns no parent property rows, map any listable record.
     const listings =
         listingsFromParents.length > 0
             ? listingsFromParents

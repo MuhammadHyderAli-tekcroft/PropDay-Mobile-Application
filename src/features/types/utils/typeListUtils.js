@@ -1,6 +1,5 @@
 export const TYPE_CATEGORY_PROPERTY = 'property';
 
-/** @param {string} slug */
 export function formatTypeCategoryLabel(slug) {
     if (!slug || slug === 'unknown') {
         return 'Unknown';
@@ -13,7 +12,6 @@ export function formatTypeCategoryLabel(slug) {
         .join(' ');
 }
 
-/** @param {Array<{ type?: string }>} types */
 export function buildTypeCategoryTabs(types) {
     const counts = new Map();
 
@@ -32,12 +30,10 @@ export function buildTypeCategoryTabs(types) {
         }));
 }
 
-/** @param {Array<{ type?: string }>} types */
 export function selectPropertyTypes(types) {
     return filterTypesByCategory(types, TYPE_CATEGORY_PROPERTY);
 }
 
-/** @param {Array<{ type?: string }>} types @param {string} categorySlug */
 export function filterTypesByCategory(types, categorySlug) {
     if (!categorySlug) {
         return types;
@@ -47,7 +43,6 @@ export function filterTypesByCategory(types, categorySlug) {
     return types.filter((item) => item.type === normalized);
 }
 
-/** @param {Array<{ slug: string }>} categories */
 export function pickDefaultCategorySlug(categories) {
     return categories[0]?.slug ?? null;
 }

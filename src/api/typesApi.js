@@ -22,7 +22,6 @@ export async function fetchAdminTypesPage(page = 1) {
 
 const MAX_TYPE_PAGES = 100;
 
-/** Fetches every page from `/admin/types` and returns a flat array of raw records. */
 export async function fetchAllAdminTypes() {
     const collected = [];
     let page = 1;

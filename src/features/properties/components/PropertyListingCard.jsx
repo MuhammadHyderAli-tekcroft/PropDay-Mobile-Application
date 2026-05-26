@@ -139,9 +139,9 @@ export default function PropertyListingCard({ item }) {
                             style={[styles.priceText, isPriceOnRequest && styles.priceTextLong]}
                             numberOfLines={1}
                         >
-                            {/* {item.price} */}
-                            {isPriceOnRequest ? (
-                                <Text style={styles.pricePeriod}>2000/mo</Text>
+                            {item.price}
+                            {!isPriceOnRequest ? (
+                                <Text style={styles.pricePeriod}>/mo</Text>
                             ) : null}
                         </Text>
                     </View>

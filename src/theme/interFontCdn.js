@@ -1,4 +1,3 @@
-/** Google Fonts CDN (fonts.gstatic.com) — Inter v13, used with expo-font on native. */
 export const INTER_FONT_CDN = {
     'Inter-Regular': {
         uri: 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_glMwcrDA.ttf',

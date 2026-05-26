@@ -6,7 +6,6 @@ import { queryKeys } from '../../../lib/queryKeys';
 import { useTypesQuery } from '../../types/queries/typesQueries';
 import { selectPropertyTypes } from '../../types/utils/typeListUtils';
 
-/** Lookups for create-property wizard only (types + areas). */
 export function useCreatePropertyLookups(enabled = true) {
     const { types, isPending: propertyTypesLoading } = useTypesQuery(enabled);
 
