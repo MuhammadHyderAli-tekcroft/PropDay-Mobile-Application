@@ -1,39 +1,36 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import QueryRefreshControl from '../../../components/QueryRefreshControl';
 
 import SplashScreen from '../../../components/SplashScreen';
 import ScreenShell from '../../../components/ScreenShell';
 import Sidebar from '../../../components/Sidebar';
 import AppTopHeader from '../../../components/AppTopHeader';
-import ContactCard from './ContactCard';
-import { useContacts } from '../hooks/useContacts';
-import { useCompanyName } from '../../../hooks/useCompanyName';
+import { useCompanyNameQuery } from '../../../hooks/useCompanyNameQuery';
 import { useRequireAuth } from '../../../hooks/useRequireAuth';
 import { useSidebar } from '../../../hooks/useSidebar';
+import { getApiErrorMessage } from '../../../utils/getApiErrorMessage';
 import { filterByActiveOption } from '../../../utils/filterByActiveOption';
+import { useContactsQuery } from '../queries/useContactsQuery';
+import ContactCard from './ContactCard';
 import { contactsStyles as styles } from '../styles/contacts.styles';
 
 export default function ContactsListScreen() {
     const { isAuthenticated } = useRequireAuth();
-    const { contacts, types, total, loading, error, refetch } = useContacts(isAuthenticated);
-    const { companyName } = useCompanyName(isAuthenticated);
+    const { contacts, types, total, isPending, isRefetching, error, refetch } =
+        useContactsQuery(isAuthenticated);
+    const { companyName } = useCompanyNameQuery(isAuthenticated);
     const { isSidebarVisible, slideAnim, fadeAnim, openMenu, closeMenu, onSidebarNavigate } =
         useSidebar('Contacts');
 
     const [activeType, setActiveType] = useState('All');
-    const [splashDone, setSplashDone] = useState(false);
 
     const filteredContacts = useMemo(
         () => filterByActiveOption(contacts, activeType, (contact) => contact.type),
         [contacts, activeType]
     );
 
-    const showSplash = loading || !splashDone;
-
-    const handleRefetch = useCallback(() => {
-        setSplashDone(false);
-        refetch();
-    }, [refetch]);
+    const errorMessage = error ? getApiErrorMessage(error, 'Failed to load contacts.') : null;
 
     const subtitle =
         filteredContacts.length === 1
@@ -44,16 +41,16 @@ export default function ContactsListScreen() {
         return null;
     }
 
-    if (showSplash) {
-        return <SplashScreen waiting={loading} onFinish={() => setSplashDone(true)} />;
+    if (isPending) {
+        return <SplashScreen waiting={isPending} onFinish={() => {}} />;
     }
 
-    if (error) {
+    if (errorMessage) {
         return (
             <ScreenShell>
                 <View style={styles.centerState}>
-                    <Text style={styles.errorText}>{error}</Text>
-                    <TouchableOpacity style={styles.retryButton} onPress={handleRefetch}>
+                    <Text style={styles.errorText}>{errorMessage}</Text>
+                    <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
                         <Text style={styles.retryButtonText}>Try Again</Text>
                     </TouchableOpacity>
                 </View>
@@ -100,20 +97,23 @@ export default function ContactsListScreen() {
                 {activeType === 'All' ? `${total} total` : subtitle}
             </Text>
 
-            {filteredContacts.length === 0 ? (
-                <View style={styles.centerState}>
-                    <Text style={styles.emptyText}>No contacts found.</Text>
-                </View>
-            ) : (
-                <FlatList
-                    style={styles.list}
-                    data={filteredContacts}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <ContactCard item={item} />}
-                    contentContainerStyle={styles.listContent}
-                    showsVerticalScrollIndicator={false}
-                />
-            )}
+            <FlatList
+                style={styles.list}
+                data={filteredContacts}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <ContactCard item={item} />}
+                contentContainerStyle={[
+                    styles.listContent,
+                    filteredContacts.length === 0 && styles.listContentEmpty,
+                ]}
+                showsVerticalScrollIndicator={false}
+                refreshControl={<QueryRefreshControl refetch={refetch} isRefetching={isRefetching} />}
+                ListEmptyComponent={
+                    <View style={styles.centerState}>
+                        <Text style={styles.emptyText}>No contacts found.</Text>
+                    </View>
+                }
+            />
 
             <Sidebar
                 isVisible={isSidebarVisible}

@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { queryClient } from '../../../lib/queryClient';
 import { setAccessToken, setUnauthorizedHandler } from '../../../services';
-import { clearCompanyNameCache } from '../../../utils/companyName';
 import { logoutRequest } from '../api/authApi';
 
 const AuthContext = createContext(null);
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
         setUnauthorizedHandler(() => {
             setAccessToken(null);
             setToken(null);
-            clearCompanyNameCache();
+            queryClient.clear();
         });
         return () => setUnauthorizedHandler(null);
     }, []);
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
         }
         setAccessToken(null);
         setToken(null);
-        clearCompanyNameCache();
+        queryClient.clear();
     }, [token]);
 
     return (

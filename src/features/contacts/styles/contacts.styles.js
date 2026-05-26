@@ -64,6 +64,9 @@ export const contactsStyles = StyleSheet.create({
         paddingBottom: 120,
         gap: 16,
     },
+    listContentEmpty: {
+        flexGrow: 1,
+    },
 
     card: {
         flexDirection: 'row',

@@ -1,6 +1,5 @@
 import { API_ORIGIN } from '../services/config';
 
-/** Single resolver for API-hosted images and avatars (localhost host, missing protocol). */
 export function resolveMediaUrl(url) {
     if (!url || typeof url !== 'string') {
         return null;

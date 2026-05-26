@@ -1,13 +1,13 @@
 import AppTopHeader from '../../../components/AppTopHeader';
 import ScreenShell from '../../../components/ScreenShell';
 import Sidebar from '../../../components/Sidebar';
-import { useCompanyName } from '../../../hooks/useCompanyName';
+import { useCompanyNameQuery } from '../../../hooks/useCompanyNameQuery';
 import { useRequireAuth } from '../../../hooks/useRequireAuth';
 import { useSidebar } from '../../../hooks/useSidebar';
 
 export default function DashboardScreen() {
     const { isAuthenticated } = useRequireAuth();
-    const { companyName } = useCompanyName(isAuthenticated);
+    const { companyName } = useCompanyNameQuery(isAuthenticated);
     const { isSidebarVisible, slideAnim, fadeAnim, openMenu, closeMenu, onSidebarNavigate } =
         useSidebar('Dashboard');
 

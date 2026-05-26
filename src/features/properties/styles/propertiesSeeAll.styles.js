@@ -57,6 +57,9 @@ export const propertiesSeeAllStyles = StyleSheet.create({
         paddingBottom: 120,
         gap: 20,
     },
+    listContentEmpty: {
+        flexGrow: 1,
+    },
 
     listCard: {
         width: '100%',
