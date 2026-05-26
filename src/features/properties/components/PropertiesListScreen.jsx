@@ -1,9 +1,7 @@
 import { useMemo, useState } from 'react';
-import { useRouter } from 'expo-router';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import QueryRefreshControl from '../../../components/QueryRefreshControl';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 
+import QueryRefreshControl from '../../../components/QueryRefreshControl';
 import SplashScreen from '../../../components/SplashScreen';
 import ScreenShell from '../../../components/ScreenShell';
 import Sidebar from '../../../components/Sidebar';
@@ -11,39 +9,61 @@ import AppTopHeader from '../../../components/AppTopHeader';
 import { useCompanyNameQuery } from '../../../hooks/useCompanyNameQuery';
 import { useRequireAuth } from '../../../hooks/useRequireAuth';
 import { useSidebar } from '../../../hooks/useSidebar';
+import { useInterFontFromCdn } from '../../../hooks/useInterFontFromCdn';
 import { getApiErrorMessage } from '../../../utils/getApiErrorMessage';
-import { filterByActiveOption } from '../../../utils/filterByActiveOption';
-import { PROPERTY_SECTIONS } from '../constants/propertySections';
+import { PROPERTIES_SCREEN_BG } from '../constants/propertyListFilters';
 import { useListingsQuery } from '../queries/listingsQueries';
-import PropertyCardLarge from './PropertyCardLarge';
-import PropertyCardSmall from './PropertyCardSmall';
-import { propertiesStyles as styles } from '../styles/properties.styles';
+import {
+    buildSummarySubtitle,
+    filterPropertyListings,
+} from '../utils/propertyListUtils';
+import PropertyListingCard from './PropertyListingCard';
+import { ALL_TYPES_LABEL } from '../constants/propertyListFilters';
+import PropertiesListHeader from './PropertiesListHeader';
+import CreatePropertyWizard from './CreatePropertyWizard';
+import { propertiesListStyles as styles } from '../styles/propertiesList.styles';
 
 export default function PropertiesListScreen() {
-    const router = useRouter();
+    const fontsLoaded = useInterFontFromCdn();
     const { isAuthenticated } = useRequireAuth();
-    const { recommended, nearby, categories, isPending, isRefetching, error, refetch } =
-        useListingsQuery(isAuthenticated);
+    const {
+        listings,
+        total,
+        summary,
+        statusFilters,
+        typeFilters,
+        isPending,
+        isRefetching,
+        error,
+        refetch,
+    } = useListingsQuery(isAuthenticated);
     const { companyName } = useCompanyNameQuery(isAuthenticated);
     const { isSidebarVisible, slideAnim, fadeAnim, openMenu, closeMenu, onSidebarNavigate } =
         useSidebar('Properties');
 
-    const [activeCategory, setActiveCategory] = useState('All');
+    const [activeStatus, setActiveStatus] = useState('All');
+    const [activeType, setActiveType] = useState(ALL_TYPES_LABEL);
+    const [isCreatePropertyOpen, setIsCreatePropertyOpen] = useState(false);
 
-    const filteredRecommended = useMemo(
-        () => filterByActiveOption(recommended, activeCategory, (item) => item.propertyType),
-        [recommended, activeCategory]
+    const filteredListings = useMemo(
+        () => filterPropertyListings(listings, activeStatus, activeType),
+        [listings, activeStatus, activeType]
     );
 
-    const filteredNearby = useMemo(
-        () => filterByActiveOption(nearby, activeCategory, (item) => item.propertyType),
-        [nearby, activeCategory]
-    );
+    const summarySubtitle = useMemo(() => buildSummarySubtitle(summary), [summary]);
 
     const errorMessage = error ? getApiErrorMessage(error, 'Failed to load properties.') : null;
 
     if (!isAuthenticated) {
         return null;
+    }
+
+    if (!fontsLoaded) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#111" />
+            </View>
+        );
     }
 
     if (isPending) {
@@ -52,7 +72,7 @@ export default function PropertiesListScreen() {
 
     if (errorMessage) {
         return (
-            <ScreenShell>
+            <ScreenShell backgroundColor={PROPERTIES_SCREEN_BG}>
                 <View style={styles.centerState}>
                     <Text style={styles.errorText}>{errorMessage}</Text>
                     <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
@@ -64,105 +84,48 @@ export default function PropertiesListScreen() {
     }
 
     return (
-        <ScreenShell>
+        <ScreenShell backgroundColor={PROPERTIES_SCREEN_BG}>
             <AppTopHeader companyName={companyName} onMenuPress={openMenu} />
 
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 40 }}
-                refreshControl={
-                    <QueryRefreshControl refetch={refetch} isRefetching={isRefetching} />
+            <FlatList
+                style={styles.list}
+                data={filteredListings}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <PropertyListingCard item={item} />}
+                ListHeaderComponent={
+                    <PropertiesListHeader
+                        total={total}
+                        summarySubtitle={summarySubtitle}
+                        statusFilters={statusFilters}
+                        typeFilters={typeFilters}
+                        activeStatus={activeStatus}
+                        activeType={activeType}
+                        onStatusChange={setActiveStatus}
+                        onTypeChange={setActiveType}
+                        onAddPress={() => setIsCreatePropertyOpen(true)}
+                    />
                 }
-            >
-                {categories.length > 0 ? (
-                    <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.categoryContainer}
-                    >
-                        {categories.map((cat) => (
-                            <TouchableOpacity
-                                key={cat.id}
-                                style={styles.categoryWrap}
-                                onPress={() => setActiveCategory(cat.name)}
-                            >
-                                <View
-                                    style={[
-                                        styles.categoryIconBox,
-                                        activeCategory === cat.name && styles.categoryIconBoxActive,
-                                    ]}
-                                >
-                                    <Ionicons
-                                        name={cat.icon}
-                                        size={24}
-                                        color={activeCategory === cat.name ? '#FFF' : '#000'}
-                                    />
-                                </View>
-                                <Text
-                                    style={[
-                                        styles.categoryText,
-                                        activeCategory === cat.name && styles.categoryTextActive,
-                                    ]}
-                                >
-                                    {cat.name}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </ScrollView>
-                ) : null}
+                contentContainerStyle={[
+                    styles.listContainer,
+                    filteredListings.length === 0 && styles.listContainerEmpty,
+                ]}
+                showsVerticalScrollIndicator={false}
+                refreshControl={<QueryRefreshControl refetch={refetch} isRefetching={isRefetching} />}
+                ListEmptyComponent={
+                    <View style={styles.centerState}>
+                        <Text style={styles.emptyText}>
+                            {listings.length > 0
+                                ? 'No properties found.'
+                                : 'No properties found.'}
+                        </Text>
+                    </View>
+                }
+            />
 
-                <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Recommended Property</Text>
-                    <TouchableOpacity
-                        onPress={() =>
-                            router.push({
-                                pathname: '/properties/see-all',
-                                params: { section: PROPERTY_SECTIONS.RECOMMENDED },
-                            })
-                        }
-                    >
-                        <Text style={styles.seeAll}>See all</Text>
-                    </TouchableOpacity>
-                </View>
-
-                {filteredRecommended.length === 0 ? (
-                    <Text style={[styles.emptyText, { marginBottom: 24 }]}>No properties found.</Text>
-                ) : (
-                    <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.horizontalList}
-                    >
-                        {filteredRecommended.map((item) => (
-                            <PropertyCardLarge key={item.id} item={item} />
-                        ))}
-                    </ScrollView>
-                )}
-
-                <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Nearby Property</Text>
-                    <TouchableOpacity
-                        onPress={() =>
-                            router.push({
-                                pathname: '/properties/see-all',
-                                params: { section: PROPERTY_SECTIONS.NEARBY },
-                            })
-                        }
-                    >
-                        <Text style={styles.seeAll}>See all</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.verticalList}>
-                    {filteredNearby.length === 0 ? (
-                        <Text style={styles.emptyText}>No properties found.</Text>
-                    ) : (
-                        filteredNearby.map((item) => (
-                            <PropertyCardSmall key={`nearby-${item.id}`} item={item} />
-                        ))
-                    )}
-                </View>
-            </ScrollView>
+            <CreatePropertyWizard
+                visible={isCreatePropertyOpen}
+                onClose={() => setIsCreatePropertyOpen(false)}
+            />
 
             <Sidebar
                 isVisible={isSidebarVisible}

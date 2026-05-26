@@ -5,11 +5,12 @@ import { useRouter } from 'expo-router';
 import { navigateSidebarItem } from '../utils/sidebarNavigation';
 
 const { width: screenWidth } = Dimensions.get('window');
+export const SIDEBAR_WIDTH = screenWidth * 0.8;
 
 export function useSidebar(activeItem) {
     const router = useRouter();
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-    const slideAnim = useRef(new Animated.Value(-screenWidth)).current;
+    const slideAnim = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     const openMenu = useCallback(() => {
@@ -32,7 +33,7 @@ export function useSidebar(activeItem) {
     const closeMenu = useCallback(() => {
         Animated.parallel([
             Animated.timing(slideAnim, {
-                toValue: -screenWidth,
+                toValue: -SIDEBAR_WIDTH,
                 duration: 250,
                 easing: Easing.in(Easing.cubic),
                 useNativeDriver: true,

@@ -15,6 +15,15 @@ export function useListingsQuery(enabled = true) {
 
     return {
         listings: query.data?.listings ?? [],
+        total: query.data?.total ?? 0,
+        summary: query.data?.summary ?? {
+            tenanted: 0,
+            vacant: 0,
+            part: 0,
+            potentialMonthly: '£0',
+        },
+        statusFilters: query.data?.statusFilters ?? [],
+        typeFilters: query.data?.typeFilters ?? [],
         recommended: query.data?.recommended ?? [],
         nearby: query.data?.nearby ?? [],
         categories: query.data?.categories ?? [],

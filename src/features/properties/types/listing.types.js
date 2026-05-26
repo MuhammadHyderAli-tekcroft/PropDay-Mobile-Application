@@ -18,6 +18,11 @@
  * @property {string[]} images
  * @property {string} description
  * @property {string} propertyType
+ * @property {string|null} license From meta.property_licence_type (e.g. Selective Licence)
+ * @property {'Tenanted'|'Vacant'|'Part'} status
+ * @property {number} rentAmount
+ * @property {string|null} tenantName
+ * @property {string|null} paidStatus
  * @property {ListingBroker} broker
  * @property {boolean} isRecommended
  */
